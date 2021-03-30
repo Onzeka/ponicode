@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <style>
+        .container{
+            width:100%;
+            height:5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label class="" for="searchBar"></label>
+        <input class="" type="text" id="searchBar">
+        <button id="searchButton" type="button" class="">Search</button>
+    </div>
+    <div class="results">
+        <ul id="results">
+
+        </ul>
+    </div>
+    <script>
+        var inputValue = "";
+        $(document).ready(function(){
+            console.log("Ready");    
+            $("#searchBar").change(function(){
+                console.log($("#searchBar").val());
+                inputValue = $("#searchBar").val();
+            });
+            $("#searchButton").on('click', function(){
+                $.ajax({
+                    url:'/call',
+                    method:'POST',
+                    data:{
+                        search:inputValue
+                    }
+                    }).then(function(data){
+                        console.log("THEN")
+                        console.log(data)
+                        resp = data.response
+                        $("#results").html(resp.map(x => '<li><pre class="prettyprint"><code class="language-py">'+x+'</code></pre></li>'))
+                        PR.prettyPrint()    
+                    }).done(function(){
+                        console.log("DONE")
+                })
+            })
+        });
+    </script>
+</body>
+</html>
